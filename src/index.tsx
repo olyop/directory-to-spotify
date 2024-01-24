@@ -1,6 +1,7 @@
-import Main from "main";
+import { Main } from "main";
+import { Spotify } from "providers/spotify";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter as ReactRouter } from "react-router-dom";
 import "tailwindcss/tailwind.css";
 
 import "./index.css";
@@ -14,7 +15,9 @@ if (!container) {
 const root = createRoot(container);
 
 root.render(
-	<BrowserRouter>
-		<Main />
-	</BrowserRouter>,
+	<ReactRouter>
+		<Spotify>
+			<Main />
+		</Spotify>
+	</ReactRouter>,
 );

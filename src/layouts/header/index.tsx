@@ -1,12 +1,17 @@
 import { FC } from "react";
 
-const Header: FC = () => (
-	<div className="flex items-center gap-8 justify-center py-8">
-		<img src="/logo.png" alt="Directory to Spotify logo" className="w-12 h-12" />
-		<a className="text-4xl" href={window.location.origin} aria-label="Directory to Spotify">
-			Directory to Spotify
-		</a>
-	</div>
-);
+import { HeaderAccount } from "./account";
+import { HeaderLogo } from "./logo";
+import { HeaderMenu } from "./menu";
+import { HeaderShareButton } from "./share-button";
 
-export default Header;
+export const Header: FC = () => (
+	<header className="flex relative items-center justify-between py-4 w-full bg-slate-800 shadow-2xl px-4 h-header-height">
+		<HeaderMenu />
+		<HeaderLogo />
+		<div className="flex gap-4">
+			<HeaderShareButton />
+			<HeaderAccount />
+		</div>
+	</header>
+);
