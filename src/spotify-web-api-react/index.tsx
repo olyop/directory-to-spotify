@@ -24,6 +24,7 @@ export const SpotifyProvider: FC<PropsWithChildren<SpotifyProviderProps>> = ({ o
 
 	const optionsRef = useRef<SpotifyInternalOptions>(spotifyInputToInternalOptions(optionsProp));
 
+	const [code, setCode] = useState<string | null>(null);
 	const [isAuthenticated, setIsAuthenticated] = useState(retrieveStoredAccessToken() === null ? null : true);
 	const [user, setUser] = useState<SpotifyUser | null>(retrieveStoredUser());
 
@@ -54,7 +55,9 @@ export const SpotifyProvider: FC<PropsWithChildren<SpotifyProviderProps>> = ({ o
 		if (searchParams.has("error")) {
 			searchParams.delete("error");
 
-			setSearchParams(searchParams);
+			setSearchParams(searchParams, {
+				replace: true,
+			});
 		}
 	};
 
@@ -67,18 +70,23 @@ export const SpotifyProvider: FC<PropsWithChildren<SpotifyProviderProps>> = ({ o
 		setUser(userData);
 	};
 
-	const handleAuthentication = async (code: string) => {
-		try {
-			handleRemoveCodeSearchParam();
+	const handleAuthentication = async () => {
+		if (code) {
+			try {
+				await retrieveAccessToken(optionsRef.current, code);
 
-			await retrieveAccessToken(optionsRef.current, code);
+				setIsAuthenticated(true);
 
-			setIsAuthenticated(true);
-
-			void handleUser();
-		} catch {
-			setIsAuthenticated(false);
+				void handleUser();
+			} catch {
+				setIsAuthenticated(false);
+			}
 		}
+	};
+
+	const handleCode = () => {
+		setCode(codeSearchParam);
+		handleRemoveCodeSearchParam();
 	};
 
 	const handleAuthorizationError = () => {
@@ -88,8 +96,8 @@ export const SpotifyProvider: FC<PropsWithChildren<SpotifyProviderProps>> = ({ o
 	};
 
 	useEffect(() => {
-		if (codeSearchParam) {
-			void handleAuthentication(codeSearchParam);
+		if (codeSearchParam && !isAuthenticated) {
+			handleCode();
 		}
 	}, [codeSearchParam]);
 
@@ -98,6 +106,12 @@ export const SpotifyProvider: FC<PropsWithChildren<SpotifyProviderProps>> = ({ o
 			handleAuthorizationError();
 		}
 	}, [errorSearchParam]);
+
+	useEffect(() => {
+		if (code) {
+			void handleAuthentication();
+		}
+	}, [code]);
 
 	const { current: options } = optionsRef;
 

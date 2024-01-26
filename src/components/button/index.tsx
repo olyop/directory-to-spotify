@@ -49,14 +49,14 @@ export interface ButtonProps {
 	id?: string;
 	transparent?: boolean;
 	isSubmit?: boolean;
-	leftIcon?: (className: string) => ReactNode;
+	leftIcon?: ((className: string) => ReactNode) | undefined;
 	text?: ReactNode | undefined;
 	ariaLabel: string;
 	childrenNode?: ReactNode;
-	rightIcon?: (className: string) => ReactNode;
+	rightIcon?: ((className: string) => ReactNode) | undefined;
 	onClick?: (() => void) | undefined;
 	className?: string | undefined;
 	iconClassName?: string | undefined;
-	textClassName?: string;
+	textClassName?: string | undefined;
 	disabled?: boolean;
 }

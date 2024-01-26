@@ -1,17 +1,15 @@
-import { FileSystemMap } from "layouts/directory-chooser/types";
+import { FileSystemItem } from "utilities/read-directory";
 
-import { FileSystemArrayItem } from "./types";
+export const determineFileSystemSelected = (fileSystemItem: FileSystemItem) => {
+	let selected = 0;
 
-export const convertFileSystemToArray = (map: FileSystemMap) => {
-	const array: FileSystemArrayItem[] = [];
+	const { skip, children } = fileSystemItem;
 
-	for (const [key, value] of map) {
-		array.push({
-			key,
-			value,
-			map,
-		});
+	if (!skip && children) {
+		for (const child of children) {
+			selected += determineFileSystemSelected(child);
+		}
 	}
 
-	return array;
+	return selected;
 };

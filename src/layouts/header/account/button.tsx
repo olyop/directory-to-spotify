@@ -1,6 +1,6 @@
 import spotifyLogoRedImage from "assets/spotify-logo-red.png";
 import spotifyLogoImage from "assets/spotify-logo.png";
-import { Button } from "components/button";
+import { BigButton } from "components/big-button";
 import { Breakpoint, useBreakpoint } from "hooks/use-breakpoint";
 import { FC } from "react";
 import { SpotifyContextIsAuthenticated, SpotifyContextUser } from "spotify-web-api-react/types";
@@ -18,15 +18,13 @@ export const HeaderAccountButton: FC<Props> = ({ isAuthenticated, user, onClick 
 	const shouldCollapse = breakpoint === Breakpoint.TINY || breakpoint === Breakpoint.SMALL;
 
 	return (
-		<Button
+		<BigButton
 			ariaLabel={buttonText}
 			onClick={onClick}
 			text={shouldCollapse ? undefined : buttonText}
-			leftIcon={className => <img className={`${className} rounded-full h-6 w-6`} src={buttonImage} />}
-			textClassName={`text-md ${isAuthenticated === false ? "text-red-500" : ""}`}
-			className={`bg-transparent hover:bg-transparent hover:shadow-none border border-slate-500 h-auto py-3 gap-3 hover:!bg-slate-900 focus:!bg-slate-900 w-auto ${
-				isAuthenticated === false ? "border-red-500" : ""
-			} ${shouldCollapse ? "px-3" : "px-4"}`}
+			leftIcon={className => <img className={className} src={buttonImage} />}
+			textClassName={isAuthenticated === false ? "text-red-500" : ""}
+			className={`${isAuthenticated === false ? "border-red-500" : ""} ${shouldCollapse ? "px-3" : ""}`}
 		/>
 	);
 };

@@ -43,7 +43,7 @@
 		"@oly_op/eslint-config-react": "4.0.0",
 		"@oly_op/prettier-config": "1.7.9",
 		"@oly_op/tsconfig": "1.2.0",
-		"@types/node": "20.11.5",
+		"@types/node": "20.11.6",
 		"@types/react": "18.2.48",
 		"@types/react-dom": "18.2.18",
 		"@types/wicg-file-system-access": "2023.10.4",

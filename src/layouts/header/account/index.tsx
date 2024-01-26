@@ -23,34 +23,29 @@ export const HeaderAccount: FC = () => {
 				onClose={closeModal}
 				title="Account"
 				icon={className => <UserCircleIcon className={className} />}
-				contentClassName="flex flex-col gap-8 items-center py-12"
+				contentClassName="flex flex-col gap-6 items-center !py-8"
 			>
+				<img
+					src={isAuthenticated ? user?.photoUrl ?? defaultProfileImage : spotifyLogoImage}
+					className="w-24 h-24 rounded-full"
+				/>
 				{isAuthenticated === true ? (
 					<Fragment>
-						<div className="flex flex-col items-center gap-6">
-							<img src={user?.photoUrl ?? defaultProfileImage} className="w-24 h-24 rounded-full" />
-							<h2 className="text-2xl font-bold text-center">{user?.name ?? "Loading..."}</h2>
-							<p className="text-center">{user?.emailAddress ?? "Loading..."}</p>
-							<a className="text-underline" href={user?.spotifyUrl} target="_blank" rel="noreferrer">
-								<Button
-									text="Open Profile"
-									ariaLabel="Open Profile"
-									leftIcon={className => <img src={spotifyLogoImage} className={className} />}
-									rightIcon={className => <ArrowTopRightOnSquareIcon className={className} />}
-								/>
-							</a>
-						</div>
-						<SpotifyLogInOutButton isLogin={false} onClick={closeModal} />
+						<h2 className="text-3xl font-bold text-center">{user?.name ?? "Loading..."}</h2>
+						<p className="text-center">{user?.emailAddress ?? "Loading..."}</p>
+						<a className="text-underline" href={user?.spotifyUrl} target="_blank" rel="noreferrer">
+							<Button
+								text="Open Profile"
+								ariaLabel="Open Profile"
+								leftIcon={className => <img src={spotifyLogoImage} className={className} />}
+								rightIcon={className => <ArrowTopRightOnSquareIcon className={className} />}
+							/>
+						</a>
 					</Fragment>
 				) : (
-					<Fragment>
-						<div className="flex flex-col items-center gap-6">
-							<img src={spotifyLogoImage} className="w-24 h-24 rounded-full" />
-							<p className="text-center">To get started, please log in to your Spotify account.</p>
-						</div>
-						<SpotifyLogInOutButton isLogin />
-					</Fragment>
+					<p className="text-center">To get started, please log in to your Spotify account.</p>
 				)}
+				<SpotifyLogInOutButton isLogin={isAuthenticated !== true} onClick={closeModal} />
 			</Modal>
 		</Fragment>
 	);
