@@ -1,0 +1,63 @@
+{
+	"name": "directory-to-spotify",
+	"version": "1.0.0",
+	"description": "Directory To Spotify",
+	"author": {
+		"name": "Oliver Plummer",
+		"email": "oliver.plummer@outlook.com",
+		"url": "https://github.com/olyop/directorytospotify.com"
+	},
+	"license": "GPL-3.0",
+	"private": true,
+	"type": "module",
+	"bugs": {
+		"url": "https://github.com/olyop/directory-to-spotify/issues",
+		"email": "oliver.plummer@outlook.com"
+	},
+	"volta": {
+		"node": "21.4.0",
+		"npm": "10.2.5"
+	},
+	"engines": {
+		"node": "21.4.0",
+		"npm": "10.2.5"
+	},
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build"
+	},
+	"dependencies": {
+		"@heroicons/react": "2.1.1",
+		"react": "18.2.0",
+		"react-dom": "18.2.0",
+		"react-google-recaptcha-v3": "1.10.1",
+		"react-router-dom": "6.21.3",
+		"tailwindcss": "3.4.1"
+	},
+	"devDependencies": {
+		"@oly_op/eslint-config-react": "4.0.0",
+		"@types/eslint": "8.56.2",
+		"@types/node": "20.11.13",
+		"@types/react": "18.2.48",
+		"@types/react-dom": "18.2.18",
+		"@types/wicg-file-system-access": "2023.10.4",
+		"@vitejs/plugin-react-swc": "3.5.0",
+		"autoprefixer": "10.4.17",
+		"content-security-policy-builder": "2.1.1",
+		"postcss": "8.4.33",
+		"postcss-load-config": "5.0.2",
+		"ts-node": "10.9.2",
+		"vite": "5.0.12",
+		"vite-imagetools": "6.2.9",
+		"vite-plugin-checker": "0.6.2",
+		"vite-tsconfig-paths": "4.3.1",
+		"workbox-cacheable-response": "7.0.0",
+		"workbox-core": "7.0.0",
+		"workbox-expiration": "7.0.0",
+		"workbox-range-requests": "7.0.0",
+		"workbox-recipes": "7.0.0",
+		"workbox-routing": "7.0.0",
+		"workbox-strategies": "7.0.0",
+		"workbox-window": "7.0.0"
+	}
+}

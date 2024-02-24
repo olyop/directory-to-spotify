@@ -23,39 +23,22 @@
 		"npm": "10.2.5"
 	},
 	"scripts": {
-		"dev": "vite",
-		"build": "vite build",
+		"client-dev": "cd client && npm run dev",
+		"client-build": "cd client && npm run build && cd ..",
+		"web-workers-dev": "cd web-workers && npm run dev",
+		"web-workers-build": "cd web-workers && npm run build && cd ..",
 		"deploy-clear": "aws s3 rm s3://directorytospotify.s3.ap-southeast-2.amazonaws.com --recursive",
-		"deploy-sync": "aws s3 sync --cache-control max-age=31536000 ./dist/ s3://directorytospotify.s3.ap-southeast-2.amazonaws.com",
-		"deploy": "npm run build && npm run deploy-clear && npm run deploy-sync"
-	},
-	"dependencies": {
-		"@heroicons/react": "2.1.1",
-		"react": "18.2.0",
-		"react-dom": "18.2.0",
-		"react-google-recaptcha-v3": "1.10.1",
-		"react-router-dom": "6.21.3",
-		"tailwindcss": "3.4.1"
+		"deploy-sync": "aws s3 sync --cache-control max-age=31536000 ./client/dist/ s3://directorytospotify.s3.ap-southeast-2.amazonaws.com",
+		"deploy": "npm run client-build && npm run deploy-clear && npm run deploy-sync",
+		"dev": "concurrently --kill-others \"npm run client-dev\" \"npm run web-workers-dev\""
 	},
 	"devDependencies": {
 		"@oly_op/cspell-dict": "1.1.5",
-		"@oly_op/eslint-config": "6.5.5",
-		"@oly_op/eslint-config-react": "4.0.0",
+		"@oly_op/eslint-config": "6.5.7",
 		"@oly_op/prettier-config": "1.7.9",
 		"@oly_op/tsconfig": "1.2.0",
-		"@types/node": "20.11.6",
-		"@types/react": "18.2.48",
-		"@types/react-dom": "18.2.18",
-		"@types/wicg-file-system-access": "2023.10.4",
-		"@vitejs/plugin-react-swc": "3.5.0",
-		"autoprefixer": "10.4.17",
-		"content-security-policy-builder": "2.1.1",
-		"postcss": "8.4.33",
-		"postcss-load-config": "5.0.2",
-		"ts-node": "10.9.2",
-		"vite": "5.0.12",
-		"vite-imagetools": "6.2.9",
-		"vite-plugin-checker": "0.6.2",
-		"vite-tsconfig-paths": "4.3.1"
+		"@types/node": "20.11.13",
+		"concurrently": "8.2.2",
+		"ts-node": "10.9.2"
 	}
 }

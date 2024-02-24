@@ -1,4 +1,10 @@
-node_modules/
-dist/
+node_modules
 
-.env.local
+client/node_modules
+client/dist
+client/public/metadata-scanner.js
+client/public/service-worker.js
+client/public/spotify-matcher.js
+client/.env.local
+
+web-workers/node_modules

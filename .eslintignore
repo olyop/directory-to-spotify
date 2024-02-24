@@ -1,1 +1,4 @@
-dist/
+client/dist
+client/public/metadata-scanner.js
+client/public/service-worker.js
+client/public/spotify-matcher.js

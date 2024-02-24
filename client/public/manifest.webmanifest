@@ -1,0 +1,20 @@
+{
+	"dir": "ltr",
+	"lang": "en-US",
+	"name": "Directory To Spotify",
+	"id": "directory-to-spotify",
+	"display": "standalone",
+	"theme_color": "#1db954",
+	"short_name": "Directory To Spotify",
+	"orientation": "portrait",
+	"description": "Directory To Spotify",
+	"start_url": "directory-to-spotify",
+	"background_color": "#14813a",
+	"icons": [
+		{
+			"src": "/logo.png",
+			"sizes": "243x243",
+			"type": "image/png"
+		}
+	]
+}

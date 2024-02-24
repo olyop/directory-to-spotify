@@ -1,0 +1,7 @@
+{
+	"files.exclude": {
+		"client/node_modules": true,
+		"client/dist": true,
+		"web-workers/node_modules": true
+	}
+}

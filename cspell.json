@@ -1,3 +1,11 @@
 {
-	"import": ["@oly_op/cspell-dict/cspell-ext.json"]
+	"import": ["@oly_op/cspell-dict/cspell-ext.json"],
+	"ignorePaths": ["./cspell-dictionary.txt", "./client/.env.local"],
+	"dictionaryDefinitions": [
+		{
+			"name": "directory-to-spotify",
+			"path": "./cspell-dictionary.txt"
+		}
+	],
+	"dictionaries": ["directory-to-spotify"]
 }
