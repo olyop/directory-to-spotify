@@ -1,6 +1,6 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, createElement } from "react";
 
-const baseIconClassName = "h-5 w-5";
+const baseIconClassName = "size-7";
 
 export const Button: FC<ButtonProps> = ({
 	id,
@@ -12,6 +12,7 @@ export const Button: FC<ButtonProps> = ({
 	rightIcon,
 	onClick,
 	className,
+	spanClassName,
 	iconClassName,
 	textClassName,
 	disabled,
@@ -26,21 +27,25 @@ export const Button: FC<ButtonProps> = ({
 		onClick={onClick}
 		className={`${
 			text === undefined && (leftIcon !== undefined || rightIcon !== undefined)
-				? "p-2 rounded-full w-9 h-9"
-				: "px-4 h-9"
-		} font-bold rounded-lg ${
+				? "size-12 min-h-12 min-w-12 rounded-full"
+				: "h-12 rounded-2xl pl-4 pr-4"
+		} border-spotify-hover border ${
 			transparent
-				? "text-black bg-transparent hover:bg-slate-700"
+				? disabled
+					? "cursor-not-allowed border-transparent bg-black"
+					: "hover:bg-spotify-hover focus:bg-spotify-hover bg-transparent"
 				: disabled
-				  ? "cursor-not-allowed text-gray-500 bg-gray-200 !shadow-none"
-				  : "cursor-pointer text-white bg-primary hover:bg-primary-dark shadow"
-		} text-sm uppercase flex items-center justify-center gap-2 ${transparent ? "" : "shadow-sm"} ${
-			disabled ? "" : "hover:shadow-md"
-		} select-none transition-all items-center ${className ?? ""}`}
+					? "cursor-not-allowed"
+					: "bg-primary-dark hover:bg-primary focus:bg-primary cursor-pointer shadow"
+		} flex select-none items-center items-center justify-center gap-3 text-sm uppercase transition-all ${className ?? ""}`}
 	>
-		{leftIcon && leftIcon(`${baseIconClassName} ${iconClassName ?? ""}`)}
-		{text && (textClassName ? <span className={textClassName}>{text}</span> : text)}
-		{rightIcon && rightIcon(`${baseIconClassName} ${iconClassName ?? ""}`)}
+		{leftIcon && leftIcon(`${baseIconClassName} ${spanClassName ?? ""} ${iconClassName ?? ""}`)}
+		{text && (
+			<b>
+				<span className={`-mt-0.5 ${spanClassName} ${textClassName ?? ""}`}>{text}</span>
+			</b>
+		)}
+		{rightIcon && rightIcon(`${baseIconClassName} ${spanClassName ?? ""} ${iconClassName ?? ""}`)}
 		{childrenNode}
 	</button>
 );
@@ -56,6 +61,7 @@ export interface ButtonProps {
 	rightIcon?: ((className: string) => ReactNode) | undefined;
 	onClick?: (() => void) | undefined;
 	className?: string | undefined;
+	spanClassName?: string | undefined;
 	iconClassName?: string | undefined;
 	textClassName?: string | undefined;
 	disabled?: boolean;

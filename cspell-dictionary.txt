@@ -1,2 +1,13 @@
+aacp
+aiffc
 directorytospotify
-wicg
+dsdiff
+equest
+flac
+IDBP
+matroska
+speex
+spotify
+uidotdev
+vorbis
+wavpack

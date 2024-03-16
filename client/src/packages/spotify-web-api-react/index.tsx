@@ -1,131 +1,111 @@
-import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
+import { FC, PropsWithChildren, createElement, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-import {
-	convertUserData,
-	deleteStoredAccessToken,
-	deleteStoredUser,
-	hasValidStoredAccessToken,
-	redirectToAuthCodeFlow,
-	retrieveAccessToken,
-	retrieveStoredUser,
-	storeUser,
-} from "./oauth-helpers";
+import { SpotifyWebApiClient } from "../spotify-web-api";
 import { SpotifyContext } from "./spotify-context";
-import { SpotifyInternalOptions, SpotifyProviderProps, SpotifyUser } from "./types";
-import { spotifyInputToInternalOptions, spotifyRequest } from "./utilities";
+import {
+	SpotifyContext as SpotifyContextType,
+	SpotifyReactProviderProps,
+	SpotifyUser,
+	SpotifyWebApiReactContextUser,
+	SpotifyWebApiReactOptions,
+} from "./types";
+import { deleteStoredUser, getUser, retrieveStoredUser } from "./user";
 
 export { useSpotify } from "./use-spotify";
-export { useSpotifyFetch } from "./use-spotify-fetch";
 export { useSpotifyQuery } from "./use-spotify-query";
 
-export const SpotifyProvider: FC<PropsWithChildren<SpotifyProviderProps>> = ({ options: optionsProp, children }) => {
+export const SpotifyWebApiReactProvider: FC<PropsWithChildren<SpotifyReactProviderProps>> = ({
+	client,
+	options,
+	children,
+}) => {
 	const [searchParams, setSearchParams] = useSearchParams();
 
-	const optionsRef = useRef<SpotifyInternalOptions>(spotifyInputToInternalOptions(optionsProp));
+	const authorizationCode = searchParams.get("code");
 
-	const [code, setCode] = useState<string | null>(null);
-	const [isAuthenticated, setIsAuthenticated] = useState(hasValidStoredAccessToken());
-	const [user, setUser] = useState<SpotifyUser | null>(retrieveStoredUser());
+	const initialIsAuthenticated = client.storageProvider
+		? SpotifyWebApiClient.isAuthenticatedInitial(client.storageProvider)
+		: false;
 
-	const codeSearchParam = searchParams.get("code");
-	const errorSearchParam = searchParams.get("error");
+	const [isAuthenticated, setIsAuthenticated] = useState(initialIsAuthenticated);
+	const [isStorageReady, setIsStorageReady] = useState(client.cacheProvider?.isReady ?? false);
 
-	const spotifyLogin = () => {
-		void redirectToAuthCodeFlow(optionsRef.current);
-	};
-
-	const spotifyLogout = () => {
-		deleteStoredAccessToken();
-		deleteStoredUser();
-
-		setIsAuthenticated(null);
-		setUser(null);
-	};
-
-	const handleRemoveCodeSearchParam = () => {
+	const handleAuthorizationCodeDelete = () => {
 		if (searchParams.has("code")) {
-			searchParams.delete("code");
-
-			setSearchParams(searchParams);
-		}
-	};
-
-	const handleRemoveErrorSearchParam = () => {
-		if (searchParams.has("error")) {
-			searchParams.delete("error");
-
-			setSearchParams(searchParams, {
-				replace: true,
+			setSearchParams(prevState => {
+				prevState.delete("code");
+				return prevState;
 			});
 		}
 	};
 
+	const handleSetIsAuthenticated = (value: boolean) => {
+		setIsAuthenticated(value);
+		handleAuthorizationCodeDelete();
+	};
+
+	client.setOptions({
+		authorizationCode,
+		onAuthenticatedChange: handleSetIsAuthenticated,
+	});
+
+	const clientRef = useRef<SpotifyWebApiClient>(client);
+
+	const [user, setUser] = useState<SpotifyUser | null>(retrieveStoredUser());
+
+	const login = () => {
+		clientRef.current.login();
+	};
+
+	const logout = () => {
+		deleteStoredUser();
+		setUser(null);
+
+		clientRef.current.logout();
+	};
+
 	const handleUser = async () => {
-		const data = await spotifyRequest(optionsRef.current)("GET", "me");
+		if (!authorizationCode) return;
 
-		const userData = convertUserData(data, optionsRef.current);
+		const userValue = await getUser(clientRef.current, options?.defaultProfileImagePath);
 
-		storeUser(userData);
-		setUser(userData);
+		setUser(userValue);
 	};
 
-	const handleAuthentication = async () => {
-		if (code) {
-			try {
-				await retrieveAccessToken(optionsRef.current, code);
+	const handleInitialization = async () => {
+		await clientRef.current.initialize();
 
-				setIsAuthenticated(true);
+		setIsStorageReady(true);
 
-				void handleUser();
-			} catch {
-				setIsAuthenticated(false);
-			}
-		}
-	};
-
-	const handleCode = () => {
-		setCode(codeSearchParam);
-		handleRemoveCodeSearchParam();
-	};
-
-	const handleAuthorizationError = () => {
-		handleRemoveErrorSearchParam();
-
-		setIsAuthenticated(false);
+		await handleUser();
 	};
 
 	useEffect(() => {
-		if (codeSearchParam && !isAuthenticated) {
-			handleCode();
-		}
-	}, [codeSearchParam]);
+		if (isStorageReady) return;
 
-	useEffect(() => {
-		if (errorSearchParam) {
-			handleAuthorizationError();
-		}
-	}, [errorSearchParam]);
+		void handleInitialization();
+	}, [isStorageReady]);
 
-	useEffect(() => {
-		if (code) {
-			void handleAuthentication();
-		}
-	}, [code]);
-
-	const { current: options } = optionsRef;
-
-	return (
-		<SpotifyContext.Provider
-			value={{
-				spotifyLogin,
-				spotifyLogout,
-				options,
-				isAuthenticated,
-				user,
-			}}
-		>
-			{children}
-		</SpotifyContext.Provider>
+	const contextValue: SpotifyContextType = useMemo(
+		() => ({
+			client: clientRef.current,
+			isAuthenticated,
+			isLoading: false,
+			login,
+			logout,
+			user,
+		}),
+		[isAuthenticated, user],
 	);
+
+	return <SpotifyContext.Provider value={contextValue}>{children}</SpotifyContext.Provider>;
+};
+
+export type {
+	SpotifyContext as SpotifyContextType,
+	SpotifyReactProviderProps,
+	SpotifyUser,
+	SpotifyWebApiReactContextUser,
+	SpotifyWebApiReactOptions,
 };

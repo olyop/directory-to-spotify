@@ -1,4 +1,1 @@
-client/dist
-client/public/metadata-scanner.js
-client/public/service-worker.js
-client/public/spotify-matcher.js
+client/src/packages/directory-to-spotify/spotify-library-matcher/spotify-types

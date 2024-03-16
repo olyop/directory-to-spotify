@@ -1,3 +1,50 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+	@font-face {
+		font-family: "CircularSP-Book";
+		font-style: normal;
+		font-weight: 100 700;
+		font-display: swap;
+		src: url("/fonts/CircularSp-Book.woff2") format("woff2");
+	}
+
+	@font-face {
+		font-family: "CircularSP-Bold";
+		font-style: normal;
+		font-weight: 800 900;
+		font-display: swap;
+		src: url("/fonts/CircularSp-Bold.woff2") format("woff2");
+	}
+}
+
+html {
+	scrollbar-face-color: #646464;
+	scrollbar-base-color: #646464;
+	scrollbar-highlight-color: #646464;
+	scrollbar-track-color: #000;
+	scrollbar-arrow-color: #000;
+	scrollbar-shadow-color: #646464;
+	scrollbar-dark-shadow-color: #646464;
+}
+
+::-webkit-scrollbar {
+	width: 15px;
+}
+
+::-webkit-scrollbar-track {
+	background: #202020;
+	border-left: 1px solid #2c2c2c;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #3e3e3e;
+	border: solid 3px #202020;
+	border-radius: 7px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: white;
+}

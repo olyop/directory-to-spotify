@@ -1,11 +1,13 @@
+/* eslint-disable unicorn/better-regex */
 import { readFile } from "node:fs/promises";
 
 import reactSwc from "@vitejs/plugin-react-swc";
-import contentSecurityPolicyBuilder from "content-security-policy-builder";
-import { Plugin, defineConfig } from "vite";
+import { Plugin, UserConfig, defineConfig, loadEnv } from "vite";
 import { imagetools } from "vite-imagetools";
 import checker from "vite-plugin-checker";
-import tsconfigPaths from "vite-tsconfig-paths";
+
+import { determineContentSecurityPolicy } from "./vite/determine-content-security-policy";
+import { Mode } from "./vite/types";
 
 const checkerOptions: Parameters<typeof checker>[0] = {
 	typescript: true,
@@ -32,45 +34,45 @@ const html = (variables: Record<string, string>): Plugin => ({
 	},
 });
 
-const determineContentSecurityPolicy = (mode: string) => {
-	const isProduction = mode === "production";
+export default defineConfig(async options => {
+	const mode = options.mode as Mode;
 
-	return contentSecurityPolicyBuilder({
-		directives: {
-			defaultSrc: ["'self'"],
-			scriptSrc: [
-				"'self'",
-				"https://*.google.com",
-				"https://*.gstatic.com",
-				"https://*.googleapis.com",
-				isProduction ? "" : "'unsafe-inline'",
-			],
-			styleSrc: ["'self'", isProduction ? "" : "'unsafe-inline'", " https://*.googleapis.com"],
-			objectSrc: ["'none'"],
-			connectSrc: ["'self'", "https://accounts.spotify.com", "https://api.spotify.com"],
-			fontSrc: ["'self'", "https://*.gstatic.com"],
-			frameSrc: ["'self'", "https://*.google.com"],
-			imgSrc: ["'self'", "data:", "https://i.scdn.co"],
-			manifestSrc: ["'self'"],
-			mediaSrc: ["'none'"],
-			workerSrc: ["'self'"],
-		},
-	});
-};
+	const environmentVariables = loadEnv(mode, process.cwd(), "");
 
-export default defineConfig(async ({ mode }) => ({
-	plugins: [
-		reactSwc(),
-		tsconfigPaths(),
-		imagetools(),
-		checker(checkerOptions),
-		html({ "VITE_CONTENT_SECURITY_POLICY": determineContentSecurityPolicy(mode) }),
-	],
-	server: {
-		host: true,
-		https: {
-			cert: await readFile("/home/op/.certificates/localhost.pem"),
-			key: await readFile("/home/op/.certificates/localhost-key.pem"),
+	process.env = { ...process.env, ...environmentVariables };
+
+	const config: UserConfig = {
+		plugins: [
+			reactSwc(),
+			imagetools(),
+			checker(checkerOptions),
+			html({ "VITE_CONTENT_SECURITY_POLICY": determineContentSecurityPolicy(mode) }),
+		],
+		define: {
+			__DEV__: JSON.stringify(mode === "development"),
+			"globalThis.__DEV__": JSON.stringify(mode === "development"),
 		},
-	},
-}));
+		server: {
+			https:
+				mode === "development"
+					? {
+							cert: await readFile(process.env.TLS_CERT_PATH),
+							key: await readFile(process.env.TLS_KEY_PATH),
+						}
+					: undefined,
+		},
+	};
+
+	return config;
+});
+
+declare global {
+	// eslint-disable-next-line @typescript-eslint/no-namespace
+	namespace NodeJS {
+		// eslint-disable-next-line unicorn/prevent-abbreviations
+		interface ProcessEnv {
+			TLS_CERT_PATH: string;
+			TLS_KEY_PATH: string;
+		}
+	}
+}

@@ -15,30 +15,28 @@
 		"email": "oliver.plummer@outlook.com"
 	},
 	"volta": {
-		"node": "21.4.0",
-		"npm": "10.2.5"
+		"node": "21.6.2",
+		"npm": "10.4.0"
 	},
 	"engines": {
-		"node": "21.4.0",
-		"npm": "10.2.5"
+		"node": "21.6.2",
+		"npm": "10.4.0"
 	},
 	"scripts": {
-		"client-dev": "cd client && npm run dev",
+		"client-dev": "cd client && npm run development",
 		"client-build": "cd client && npm run build && cd ..",
-		"web-workers-dev": "cd web-workers && npm run dev",
-		"web-workers-build": "cd web-workers && npm run build && cd ..",
 		"deploy-clear": "aws s3 rm s3://directorytospotify.s3.ap-southeast-2.amazonaws.com --recursive",
 		"deploy-sync": "aws s3 sync --cache-control max-age=31536000 ./client/dist/ s3://directorytospotify.s3.ap-southeast-2.amazonaws.com",
 		"deploy": "npm run client-build && npm run deploy-clear && npm run deploy-sync",
-		"dev": "concurrently --kill-others \"npm run client-dev\" \"npm run web-workers-dev\""
+		"development": "npm run client-dev",
+		"production": "npm run client-build && npm run deploy"
 	},
 	"devDependencies": {
-		"@oly_op/cspell-dict": "1.1.5",
-		"@oly_op/eslint-config": "6.5.7",
-		"@oly_op/prettier-config": "1.7.9",
-		"@oly_op/tsconfig": "1.2.0",
-		"@types/node": "20.11.13",
+		"@oly_op/cspell-dict": "1.1.10",
+		"@oly_op/eslint-config": "6.7.20",
+		"@oly_op/prettier-config": "1.8.2",
+		"@oly_op/tsconfig": "1.2.1",
 		"concurrently": "8.2.2",
-		"ts-node": "10.9.2"
+		"npm-check-updates": "16.14.15"
 	}
 }

@@ -1,11 +1,9 @@
-import { Main } from "main";
-import { Spotify } from "providers/spotify";
-import { StrictMode } from "react";
+import { createElement } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter as ReactRouter } from "react-router-dom";
 import "tailwindcss/tailwind.css";
 
 import "./index.css";
+import { Main } from "./main";
 
 const container = document.getElementById("root");
 
@@ -15,12 +13,4 @@ if (!container) {
 
 const root = createRoot(container);
 
-root.render(
-	<StrictMode>
-		<ReactRouter>
-			<Spotify>
-				<Main />
-			</Spotify>
-		</ReactRouter>
-	</StrictMode>,
-);
+root.render(<Main />);

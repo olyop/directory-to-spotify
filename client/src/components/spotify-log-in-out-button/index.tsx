@@ -1,18 +1,19 @@
-import spotifyLogo from "assets/spotify-logo.png";
-import { Button } from "components/button";
-import { useSpotify } from "packages/spotify-web-api-react";
-import { FC } from "react";
+import { FC, createElement } from "react";
+
+import spotifyLogo from "../../assets/spotify-logo.png";
+import { useSpotify } from "../../packages/spotify-web-api-react";
+import { Button } from "../button";
 
 export const SpotifyLogInOutButton: FC<Props> = ({ isLogin, onClick }) => {
-	const { spotifyLogin, spotifyLogout } = useSpotify();
+	const { login, logout } = useSpotify();
 
 	const handleOnClick = () => {
 		onClick?.();
 
 		if (isLogin) {
-			spotifyLogin();
+			login();
 		} else {
-			spotifyLogout();
+			logout();
 		}
 	};
 
@@ -21,10 +22,10 @@ export const SpotifyLogInOutButton: FC<Props> = ({ isLogin, onClick }) => {
 			text={isLogin ? "Log in" : "Log out"}
 			ariaLabel={isLogin ? "Log in" : "Log out"}
 			onClick={handleOnClick}
-			className={isLogin ? "!h-14 px-6 gap-4" : undefined}
+			className={isLogin ? "!h-14 gap-4 px-6" : undefined}
 			textClassName={isLogin ? "text-2xl" : undefined}
 			iconClassName={isLogin ? "!w-9 !h-9" : undefined}
-			leftIcon={className => <img src={spotifyLogo} className={className} />}
+			leftIcon={className => <img src={spotifyLogo} className={className} alt="Spotify Logo" />}
 		/>
 	);
 };

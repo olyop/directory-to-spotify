@@ -1,3 +1,3 @@
-export interface OnClickOptions {
-	onClick: () => void;
+export interface IndexedDBRow {
+	id: string;
 }

@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 
-import { HttpMethod, SpotifyRequestData } from "./types";
-import { useSpotifyFetch } from "./use-spotify-fetch";
+import { SpotifyQueryHttpMethod, SpotifyWebApiClientQueryOptions } from "../spotify-web-api";
+import { useSpotify } from "./use-spotify";
 
 export const useSpotifyQuery = <T extends Record<string, unknown>>(
-	method: HttpMethod,
+	method: SpotifyQueryHttpMethod,
 	path: string,
-	requestData?: SpotifyRequestData,
+	options?: SpotifyWebApiClientQueryOptions,
 ) => {
-	const spotifyFetch = useSpotifyFetch();
+	const { client, isAuthenticated } = useSpotify();
 
 	const [isCalled, setIsCalled] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -21,7 +21,7 @@ export const useSpotifyQuery = <T extends Record<string, unknown>>(
 		setData(null);
 
 		try {
-			const response = await spotifyFetch<T>(method, path, requestData);
+			const response = await client.query<T>(method, path, options);
 
 			setData(response);
 		} catch (requestError) {
@@ -33,10 +33,10 @@ export const useSpotifyQuery = <T extends Record<string, unknown>>(
 	};
 
 	useEffect(() => {
-		if (!isCalled) {
+		if (isAuthenticated && !isCalled) {
 			void handleQuery();
 		}
-	}, [isCalled]);
+	}, [isAuthenticated, isCalled]);
 
 	return { loading, error, data } as const;
 };

@@ -6,5 +6,6 @@ client/public/metadata-scanner.js
 client/public/service-worker.js
 client/public/spotify-matcher.js
 client/.env.local
+client/.env.development.local
 
 web-workers/node_modules

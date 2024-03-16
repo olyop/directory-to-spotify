@@ -1,10 +1,13 @@
-import { Content } from "layouts/content";
-import { Header } from "layouts/header";
-import { FC } from "react";
+import { FC, createElement } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+
+import { Content } from "./content";
+import { SpotifyProvider as Spotify } from "./providers/spotify";
 
 export const Main: FC = () => (
-	<div className="w-screen h-screen bg-slate-900 text-white overflow-hidden">
-		<Header />
-		<Content />
-	</div>
+	<Router>
+		<Spotify>
+			<Content />
+		</Spotify>
+	</Router>
 );

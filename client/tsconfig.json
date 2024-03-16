@@ -1,13 +1,14 @@
 {
 	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
-		"baseUrl": "./src",
 		"module": "ESNext",
-		"moduleResolution": "Bundler",
+		"moduleResolution": "Node",
+		"lib": ["ESNext", "DOM", "WebWorker"],
 		"skipLibCheck": true,
 		"isolatedModules": true,
 		"noEmit": true,
-		"jsx": "react-jsx",
+		"jsx": "react",
+		"jsxFactory": "createElement",
 		"types": ["vite/client", "@types/wicg-file-system-access"]
 	},
 	"include": ["src"]
