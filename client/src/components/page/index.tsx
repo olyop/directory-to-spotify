@@ -55,7 +55,7 @@ export const Page: FC<PageProps> = ({
 					: "grid-cols-[15rem,1fr,6rem]";
 
 	return (
-		<div className="grid size-full grid-rows-[1fr,8rem] p-2">
+		<div className="grid size-full grid-rows-[1fr,6.5rem] p-2">
 			<div className={`h-content-height grid ${gridColumnsClassName}`}>
 				<Elevated className="h-content-height min-w-0" contentClassName="flex flex-col gap-6 pr-4 justify-between">
 					<div className="flex flex-col gap-6">
@@ -133,7 +133,7 @@ export const Page: FC<PageProps> = ({
 					)}
 				</Elevated>
 			</div>
-			<Elevated type="footer" contentClassName={`flex items-center justify-between !px-8 gap-8 ${controlsClassName}`}>
+			<Elevated type="footer" contentClassName={`flex items-center justify-between !px-4 gap-8 ${controlsClassName}`}>
 				{controlsNode}
 			</Elevated>
 		</div>

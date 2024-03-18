@@ -15,6 +15,7 @@ export const createWorkItemsStore = (options: CreateStoreOptions) => {
 		nowPlaying: null,
 		isMatching: false,
 		isAdding: false,
+		isClearing: false,
 	};
 
 	return createSlice({
@@ -126,6 +127,12 @@ export const createWorkItemsStore = (options: CreateStoreOptions) => {
 			stopAdding: state => {
 				state.isAdding = false;
 			},
+			startClearing: state => {
+				state.isClearing = true;
+			},
+			stopClearing: state => {
+				state.isClearing = false;
+			},
 		},
 	});
 };
@@ -151,6 +158,7 @@ interface WorkItemsState {
 	nowPlaying: string | null;
 	isMatching: boolean;
 	isAdding: boolean;
+	isClearing: boolean;
 }
 
 export interface WorkItemSelected extends IndexedDBRow {

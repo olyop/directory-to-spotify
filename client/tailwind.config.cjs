@@ -17,7 +17,7 @@ module.exports = {
 				"spotify-hover": "#242424",
 			},
 			height: {
-				"content-height": "calc(100vh - 9rem)",
+				"content-height": "calc(100vh - 7.5rem)",
 				"scroll-height": "calc(100vh - 10rem)",
 				"bar-height": "calc(8rem)",
 			},

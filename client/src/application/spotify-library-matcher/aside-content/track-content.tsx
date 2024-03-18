@@ -14,9 +14,9 @@ export const TrackContent: FC<TrackContentProps> = ({
 }) => (
 	<Fragment>
 		{image ? (
-			<img src={image} className="w-full rounded-2xl" alt={title} title={title} />
+			<img src={image} className="aspect-square w-full rounded-2xl bg-black" alt={title} title={title} />
 		) : (
-			<div className="h-auto w-full rounded-2xl bg-black" />
+			<div className="aspect-square h-auto w-full rounded-2xl bg-black" />
 		)}
 		<div className="flex size-full flex-col gap-2">
 			<div className="flex flex-col">

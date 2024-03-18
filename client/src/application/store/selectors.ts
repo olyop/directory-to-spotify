@@ -34,23 +34,28 @@ export function useWorkItemsControlsSelector() {
 	return useAppSelector(store => {
 		const workItems = getWorkItems(store);
 
-		const { isMatching, workItemLoading, nowPlaying, isAdding } = store.workItems;
+		const { isMatching, isClearing, isAdding, workItemLoading } = store.workItems;
 
-		const isAMatch = Object.values(workItems).some(workItem => workItem.match !== null);
+		let isAMatch = false;
+		let total = 0;
+		let matched = 0;
+		let matchesFound = 0;
 
-		const total = Object.keys(workItems).length;
+		Object.values(workItems).forEach(workItem => {
+			if (workItem.match !== null) {
+				if (!isAMatch) {
+					isAMatch = true;
+				}
 
-		const matched = Object.values(workItems)
-			.map(({ match }) => match)
-			.reduce((value, match) => (match ? value + 1 : value), 0);
+				if (workItem.match.trackID !== null) {
+					matchesFound += 1;
+				}
 
-		const matchesFound = Object.values(workItems).reduce((value, workItem) => {
-			if (workItem.match && workItem.match.trackID !== null) {
-				return value + 1;
+				matched += 1;
 			}
 
-			return value;
-		}, 0);
+			total += 1;
+		});
 
 		let workItem: WorkItemInternal | null = null;
 
@@ -62,14 +67,15 @@ export function useWorkItemsControlsSelector() {
 			workItem = {
 				...value,
 				isSelected: false,
-				isLoading: true,
-				isPlaying: value.match?.trackID === nowPlaying,
+				isLoading: false,
+				isPlaying: false,
 			};
 		}
 
 		return {
 			isMatching,
 			isAdding,
+			isClearing,
 			isAMatch,
 			total,
 			matched,

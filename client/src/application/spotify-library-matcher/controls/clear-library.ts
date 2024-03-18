@@ -1,14 +1,14 @@
 import { Paging, Track } from "spotify-types";
 
-import { SpotifyWebApiClient } from "../../packages/spotify-web-api";
+import { SpotifyWebApiClient } from "../../../packages/spotify-web-api";
 
-export async function clearLibrary(client: SpotifyWebApiClient) {
-	const library = await retrieveLibrary(client);
+export async function clearLibrary(client: SpotifyWebApiClient, signal: AbortSignal) {
+	const library = await retrieveLibrary(client, signal);
 
-	await deleteLibrary(client, library);
+	await deleteLibrary(client, signal, library);
 }
 
-async function retrieveLibrary(client: SpotifyWebApiClient) {
+async function retrieveLibrary(client: SpotifyWebApiClient, signal: AbortSignal) {
 	const library: Track[] = [];
 
 	let flag = true;
@@ -16,6 +16,8 @@ async function retrieveLibrary(client: SpotifyWebApiClient) {
 	const limit = 50;
 
 	while (flag) {
+		signal.throwIfAborted();
+
 		const searchParams = new URLSearchParams();
 		searchParams.append("limit", limit.toString());
 		searchParams.append("offset", offset.toString());
@@ -23,8 +25,6 @@ async function retrieveLibrary(client: SpotifyWebApiClient) {
 		const response = await client.query<Paging<{ track: Track }>>("GET", "me/tracks", {
 			searchParams,
 		});
-
-		console.log(response);
 
 		library.push(...response.items.map(item => item.track));
 
@@ -38,7 +38,7 @@ async function retrieveLibrary(client: SpotifyWebApiClient) {
 	return library;
 }
 
-async function deleteLibrary(client: SpotifyWebApiClient, library: Track[]) {
+async function deleteLibrary(client: SpotifyWebApiClient, signal: AbortSignal, library: Track[]) {
 	const libraryBatched = library.reduce<string[][]>((batched, track, index) => {
 		const batchIndex = Math.floor(index / 50);
 
@@ -54,6 +54,8 @@ async function deleteLibrary(client: SpotifyWebApiClient, library: Track[]) {
 	}, []);
 
 	for (const batch of libraryBatched) {
+		signal.throwIfAborted();
+
 		await client.query("DELETE", "me/tracks", {
 			body: {
 				ids: batch,

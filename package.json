@@ -37,6 +37,6 @@
 		"@oly_op/prettier-config": "1.8.2",
 		"@oly_op/tsconfig": "1.2.1",
 		"concurrently": "8.2.2",
-		"npm-check-updates": "16.14.15"
+		"npm-check-updates": "16.14.17"
 	}
 }
