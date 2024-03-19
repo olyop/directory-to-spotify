@@ -1,4 +1,4 @@
-import { AdjustmentsHorizontalIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { FC, Fragment, createElement } from "react";
 
 import { Button } from "../../../components/button";
@@ -8,13 +8,14 @@ import { useStores } from "../../store/use-stores";
 import { ViewLocalFileItem } from "../view-item/view-local-file-item";
 import { AddToSpotifyControl } from "./add-to-spotify-control";
 import { ClearLibraryControl } from "./clear-library-control";
+import { FilterControl } from "./filter-control";
 import { MatchingControl } from "./matching-control";
 
-export const Controls: FC<ControlsProps> = ({ filter, onFilterToggle, onCancel }) => {
+export const Controls: FC<ControlsProps> = ({ onCancel }) => {
 	const stores = useStores();
 	const dispatch = useAppDispatch();
 
-	const { isMatching, isAdding, isClearing, isAMatch, matched, total, matchesFound, workItem } =
+	const { isMatching, isAdding, isClearing, isAMatch, matched, total, filter, matchesFound, workItem } =
 		useWorkItemsControlsSelector();
 
 	const handleClear = () => {
@@ -46,20 +47,7 @@ export const Controls: FC<ControlsProps> = ({ filter, onFilterToggle, onCancel }
 					/>
 				)}
 				{isAMatch && (
-					<Button
-						transparent
-						ariaLabel="Filter"
-						className="h-14 w-44 justify-between"
-						disabled={isMatching}
-						onClick={onFilterToggle}
-						text={
-							<div className="flex flex-col">
-								<span>{filter ? "Show All" : "Filter"}</span>
-								<span className="font-mono text-xs">{total - matchesFound}</span>
-							</div>
-						}
-						leftIcon={className => <AdjustmentsHorizontalIcon className={className} />}
-					/>
+					<FilterControl filter={filter} isMatching={isMatching} matchesFound={matchesFound} total={total} />
 				)}
 				{matched === total ? (
 					<Fragment>
@@ -75,7 +63,5 @@ export const Controls: FC<ControlsProps> = ({ filter, onFilterToggle, onCancel }
 };
 
 export interface ControlsProps {
-	filter: boolean;
-	onFilterToggle: () => void;
 	onCancel: () => void;
 }

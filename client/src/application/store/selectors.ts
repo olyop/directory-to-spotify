@@ -34,7 +34,7 @@ export function useWorkItemsControlsSelector() {
 	return useAppSelector(store => {
 		const workItems = getWorkItems(store);
 
-		const { isMatching, isClearing, isAdding, workItemLoading } = store.workItems;
+		const { isMatching, isClearing, isAdding, workItemLoading, filter } = store.workItems;
 
 		let isAMatch = false;
 		let total = 0;
@@ -43,9 +43,7 @@ export function useWorkItemsControlsSelector() {
 
 		Object.values(workItems).forEach(workItem => {
 			if (workItem.match !== null) {
-				if (!isAMatch) {
-					isAMatch = true;
-				}
+				isAMatch = true;
 
 				if (workItem.match.trackID !== null) {
 					matchesFound += 1;
@@ -77,6 +75,7 @@ export function useWorkItemsControlsSelector() {
 			isAdding,
 			isClearing,
 			isAMatch,
+			filter,
 			total,
 			matched,
 			matchesFound,

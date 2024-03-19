@@ -12,6 +12,7 @@ export const createWorkItemsStore = (options: CreateStoreOptions) => {
 		workItems: options.workItems,
 		workItemLoading: null,
 		selected: null,
+		filter: false,
 		nowPlaying: null,
 		isMatching: false,
 		isAdding: false,
@@ -92,11 +93,11 @@ export const createWorkItemsStore = (options: CreateStoreOptions) => {
 					workItem.match = null;
 				}
 			},
-			setSelected: (state, action: PayloadAction<WorkItemSelected>) => {
-				state.selected = action.payload;
-			},
 			clearWorkItems: state => {
 				state.workItems = null;
+			},
+			setSelected: (state, action: PayloadAction<WorkItemSelected>) => {
+				state.selected = action.payload;
 			},
 			clearSelected: state => {
 				state.selected = null;
@@ -106,6 +107,9 @@ export const createWorkItemsStore = (options: CreateStoreOptions) => {
 			},
 			clearNowPlaying: state => {
 				state.nowPlaying = null;
+			},
+			toggleFilter: state => {
+				state.filter = !state.filter;
 			},
 			toggleIsMatching: state => {
 				state.isMatching = !state.isMatching;
@@ -156,6 +160,7 @@ interface WorkItemsState {
 	workItemLoading: string | null;
 	selected: WorkItemSelected | null;
 	nowPlaying: string | null;
+	filter: boolean;
 	isMatching: boolean;
 	isAdding: boolean;
 	isClearing: boolean;
