@@ -34,7 +34,7 @@ export const FileSystemScanner: FC<FileSystemScannerProps> = ({ onScanComplete }
 	);
 
 	return fileSystem === null ? (
-		<DirectoryChooser onChoose={handleDirectoryChoose} />
+		<DirectoryChooser onChoose={handleDirectoryChoose} onScanComplete={onScanComplete} />
 	) : isExplorer ? (
 		<FileSystemExplorer fileSystem={fileSystem} onScanStart={handleScanStart} onCancel={handleDirectoryCancel} />
 	) : (

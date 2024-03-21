@@ -8,8 +8,9 @@ import { useStores } from "../../store/use-stores";
 import { ViewLocalFileItem } from "../view-item/view-local-file-item";
 import { AddToSpotifyControl } from "./add-to-spotify-control";
 import { ClearLibraryControl } from "./clear-library-control";
+import { ExportControl } from "./export-control";
 import { FilterControl } from "./filter-control";
-import { MatchingControl } from "./matching-control";
+import { MatchingControl } from "./matcher-control";
 
 export const Controls: FC<ControlsProps> = ({ onCancel }) => {
 	const stores = useStores();
@@ -55,7 +56,10 @@ export const Controls: FC<ControlsProps> = ({ onCancel }) => {
 						<AddToSpotifyControl isAdding={isAdding} />
 					</Fragment>
 				) : (
-					<MatchingControl isMatching={isMatching} matched={matched} total={total} />
+					<Fragment>
+						<ExportControl />
+						<MatchingControl isMatching={isMatching} matched={matched} total={total} />
+					</Fragment>
 				)}
 			</div>
 		</Fragment>

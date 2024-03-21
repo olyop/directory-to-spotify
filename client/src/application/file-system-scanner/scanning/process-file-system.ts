@@ -5,11 +5,11 @@ import {
 	WorkItem,
 	WorkItemFile,
 } from "../../types";
-import MetadatScannerWorker from "./metadata-scanner?worker&url";
+import metadatScannerWorkerUrl from "./metadata-scanner?worker&url";
 import { MetadataScannerWorkerInput, MetadataScannerWorkerOutput } from "./types";
 
 export async function processFileSystem(options: ProcessFileSystemOptions) {
-	const worker = new Worker(MetadatScannerWorker, {
+	const worker = new Worker(metadatScannerWorkerUrl, {
 		type: "module",
 		name: "metadata-scanner",
 	});
@@ -58,8 +58,6 @@ async function processFile(options: ProcessFileSystemFileOptions, worker: Worker
 	if ("error" in result) {
 		throw new Error(result.error);
 	}
-
-	options.signal.throwIfAborted();
 
 	void options.onWorkItem(result.workItem, result.workItemFiles);
 }

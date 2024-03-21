@@ -35,6 +35,10 @@ export interface WorkItemFile extends IndexedDBRow {
 	data: ArrayBuffer;
 }
 
+export interface WorkItemFileExport extends IndexedDBRow {
+	data: string;
+}
+
 export interface WorkItemTrackID<T> {
 	trackID: T;
 }

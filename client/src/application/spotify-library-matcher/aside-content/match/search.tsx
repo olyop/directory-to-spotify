@@ -4,7 +4,7 @@ import { ChangeEvent, FC, Fragment, createElement, useEffect, useState } from "r
 import { useSpotify } from "../../../../packages/spotify-web-api-react";
 import { useAppDispatch } from "../../../store";
 import { useStores } from "../../../store/use-stores";
-import { search } from "../../process-work-item";
+import { search } from "../../controls/matcher-control/match-work-items";
 import { ViewSpotifyTrackItem } from "../../view-item/view-spotify-track-item";
 import { WorkItemInternal } from "../../work-item-view/types";
 

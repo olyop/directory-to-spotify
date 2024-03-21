@@ -133,7 +133,7 @@ export const Page: FC<PageProps> = ({
 					)}
 				</Elevated>
 			</div>
-			<Elevated type="footer" contentClassName={`flex items-center justify-between !px-4 gap-8 ${controlsClassName}`}>
+			<Elevated type="footer" contentClassName={`flex items-center justify-between !px-4 gap-4 ${controlsClassName}`}>
 				{controlsNode}
 			</Elevated>
 		</div>

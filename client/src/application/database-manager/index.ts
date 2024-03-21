@@ -61,8 +61,10 @@ export class DatabaseManager {
 
 		const objectStore = transaction.objectStore(this.#WORK_ITEM_FILE_STORE_NAME);
 
+		const limit = pLimit(20);
+
 		for (const workItemFile of workItemFiles) {
-			awaitables.push(objectStore.put(workItemFile));
+			awaitables.push(limit(() => objectStore.put(workItemFile)));
 		}
 
 		await Promise.all(awaitables);
@@ -72,6 +74,7 @@ export class DatabaseManager {
 
 	async clearWorkItems() {
 		await this.database.clear(this.#WORK_ITEM_STORE_NAME);
+		await this.database.clear(this.#WORK_ITEM_FILE_STORE_NAME);
 	}
 
 	async clearWorkItemsMatch() {
@@ -85,11 +88,7 @@ export class DatabaseManager {
 		const limit = pLimit(20);
 		const input = workItems.map(workItem => limit(() => objectStore.put({ ...workItem, match: null })));
 
-		console.log("Clearing work items match");
-
 		await Promise.all(input);
-
-		console.log("Done");
 
 		await transaction.done;
 	}
