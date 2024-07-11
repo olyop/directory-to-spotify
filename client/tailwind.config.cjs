@@ -24,7 +24,7 @@ module.exports = {
 			width: {
 				"sidebar-open": "24rem",
 				"sidebar-closed": "11rem",
-				"content-width": "calc(100vw - 24rem - 24rem) ",
+				"content-width": "calc(100vw - 24rem - 24rem)",
 			},
 			padding: {
 				"sidebar-open": "24rem",
