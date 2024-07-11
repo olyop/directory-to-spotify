@@ -1,11 +1,7 @@
-// eslint-disable-next-line unicorn/prefer-node-protocol
-import { Buffer } from "buffer";
 import { ICommonTagsResult, parseBuffer as parseMetadata } from "music-metadata";
 
 import { WorkItem, WorkItemFile, WorkItemMetadata } from "../../types";
 import { MetadataScannerWorkerInput, MetadataScannerWorkerOutput } from "./types";
-
-self.Buffer = Buffer;
 
 addEventListener("message", event => {
 	void handleMessage(event);
@@ -69,7 +65,7 @@ async function handleCover(
 
 	const { data, format: mimeType } = picture;
 
-	const arrayBuffer = convertBufferToArrayBuffer(data);
+	const arrayBuffer = convertUint8Array(data);
 
 	const [id, cached] = await arrayBufferCache(arrayBuffer);
 
@@ -107,8 +103,13 @@ async function arrayBufferCache(arrayBuffer: ArrayBuffer) {
 	return [id, cached] as const;
 }
 
-function convertBufferToArrayBuffer(buffer: Buffer) {
-	return buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
+function convertUint8Array(buffer: Uint8Array): ArrayBuffer {
+	const arrayBuffer = new ArrayBuffer(buffer.length);
+	const view = new Uint8Array(arrayBuffer);
+
+	view.set(buffer);
+
+	return arrayBuffer;
 }
 
 const byteToHex: string[] = [];
